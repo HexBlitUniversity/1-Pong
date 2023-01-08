@@ -1,0 +1,99 @@
+[gd_scene load_steps=6 format=3 uid="uid://d8peq4nx3rfw"]
+
+[ext_resource type="PackedScene" uid="uid://bdtskmbwgipj4" path="res://paddle.tscn" id="1_c7vvd"]
+[ext_resource type="Script" path="res://gameManager.gd" id="1_xwrb1"]
+[ext_resource type="PackedScene" uid="uid://b11g3u7kr2umy" path="res://pongBall.tscn" id="2_rhnkf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u3354"]
+size = Vector2(53.5, 1202.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nmyy7"]
+size = Vector2(1873, 30.5)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_xwrb1")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2(0.9, 0.9)
+
+[node name="Player-Paddle" parent="." groups=["Player", "paddle"] instance=ExtResource("1_c7vvd")]
+position = Vector2(-802, 3)
+motion_mode = 1
+slide_on_ceiling = false
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_block_on_wall = false
+platform_on_leave = 2
+
+[node name="NPC-Paddle" parent="." groups=["NPC", "paddle"] instance=ExtResource("1_c7vvd")]
+position = Vector2(770, 6)
+motion_mode = 1
+slide_on_ceiling = false
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_block_on_wall = false
+platform_on_leave = 2
+flipPaddle = true
+
+[node name="PongBall" parent="." groups=["PongBall"] instance=ExtResource("2_rhnkf")]
+position = Vector2(1, -7)
+motion_mode = 1
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_block_on_wall = false
+platform_on_leave = 2
+
+[node name="playerGoal" type="Area2D" parent="." groups=["playerGoal"]]
+position = Vector2(-1070, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="playerGoal"]
+position = Vector2(160, 27.25)
+shape = SubResource("RectangleShape2D_u3354")
+
+[node name="npcGoal" type="Area2D" parent="." groups=["npcGoal"]]
+position = Vector2(1065, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="npcGoal"]
+position = Vector2(-153.75, 75.5)
+shape = SubResource("RectangleShape2D_u3354")
+
+[node name="TopBoundary" type="Area2D" parent="." groups=["yBoundary"]]
+position = Vector2(-6, -600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopBoundary" groups=["yBoundary"]]
+position = Vector2(6.5, 21.25)
+shape = SubResource("RectangleShape2D_nmyy7")
+
+[node name="BottomBoundary" type="Area2D" parent="." groups=["yBoundary"]]
+position = Vector2(1, 593)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomBoundary" groups=["yBoundary"]]
+position = Vector2(-4, 56)
+shape = SubResource("RectangleShape2D_nmyy7")
+
+[node name="Player Score" type="Label" parent="."]
+offset_left = -866.0
+offset_top = -550.0
+offset_right = -756.0
+offset_bottom = -524.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Player Score:"
+
+[node name="NPC Score" type="Label" parent="."]
+offset_left = 765.0
+offset_top = -557.0
+offset_right = 875.0
+offset_bottom = -531.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "NPC Score:"
+
+[node name="fuzzyness" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[connection signal="area_entered" from="playerGoal" to="." method="_on_player_goal_area_entered"]
+[connection signal="area_entered" from="npcGoal" to="." method="_on_npc_goal_area_entered"]
+[connection signal="timeout" from="fuzzyness" to="." method="_on_fuzzyness_timeout"]
