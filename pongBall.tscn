@@ -3,11 +3,11 @@
 [ext_resource type="Script" path="res://pongBall.gd" id="1_c4cti"]
 [ext_resource type="Texture2D" uid="uid://cheqrkmouoxhf" path="res://pongBall.png" id="2_isa86"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_6qqfs"]
-radius = 32.0624
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xr202"]
+size = Vector2(59, 58)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_agt24"]
-radius = 34.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1c783"]
+size = Vector2(64, 64)
 
 [node name="pongBall" type="CharacterBody2D"]
 script = ExtResource("1_c4cti")
@@ -18,9 +18,10 @@ texture = ExtResource("2_isa86")
 [node name="Area2D" type="Area2D" parent="." groups=["pongBall"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_6qqfs")
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_xr202")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_agt24")
+shape = SubResource("RectangleShape2D_1c783")
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
